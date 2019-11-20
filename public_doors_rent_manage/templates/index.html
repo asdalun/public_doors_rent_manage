@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block pagecontent %}
+<div class="page-content">
+    <h2>欢迎 {{ username }} 登录本系统，请选择功能菜单进行相关操作。</h2>
+</div><!-- /.page-content -->
+{% endblock %}
+{% block reference %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

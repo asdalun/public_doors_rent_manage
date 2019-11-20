@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block optbuttons %}
+<div class="nav-search" id="nav-search">
+    <span class="input-icon">
+        <input type="text" placeholder="审批表编号" class="nav-search-input" id="apply-id" autocomplete="off" />
+        <i class="ace-icon fa fa-search nav-search-icon"></i>
+    </span>
+    <button class="width-15 btn btn-sm btn-primary" id="btn-search" onclick="$.search_apply_table($('#apply-id').val(), 'search')">
+        <i class="ace-icon fa fa-search"></i>
+        <span class="bigger-110">查询</span>
+    </button>
+</div><!-- /.nav-search -->
+{% endblock %}
+{% block pagecontent %}
+<div class="page-content">
+    <div class="panel-body">
+        <a id="pdf" class="media" href="{{ report_name }}"></a>
+    </div>
+</div>
+<!-- /.page-content -->
+{% endblock %}
+{% block reference %}
+    <script src="{{ url_for('static', filename='js/applyreport.js') }}"></script>
+{% endblock %}
+{% block jsreference %}
+<script type="text/javascript">
+$(function() {
+    $('a.media').media({width:900, height:600});
+    $('a.mediase').media({width:900, height:600});
+});
+</script>
+{% endblock %}

@@ -1,0 +1,912 @@
+{% extends "base.html" %}
+{% block optbuttons %}
+<button class="width-15 btn btn-sm btn-primary" id="btn-save">
+    <i class="ace-icon fa fa-floppy-o"></i>
+    <span class="bigger-110">保存</span>
+</button>
+<button class="width-15 btn btn-sm btn-primary" id="btn-reset">
+    <i class="ace-icon fa fa-repeat"></i>
+    <span class="bigger-110">重置</span>
+</button>
+{% endblock %}
+{% block pagecontent %}
+
+<div class="page-content">
+<!--<div class="page-header">-->
+<!--    <h1>-->
+<!--        公有租赁住房申请表-->
+<!--        <small>-->
+<!--            <i class="ace-icon fa fa-angle-double-right"></i>-->
+<!--            请认真输入信息。单位：每平米、人、元。-->
+<!--        </small>-->
+<!--    </h1>-->
+<!--</div>-->
+<div class="row">
+        <div class="col-sm-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">申请人基本情况及申请公共租赁住房情况</h4>
+                <h6 class="widget-title">（单位：每平米、人、元）</h6>
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <form class="form-horizontal" role="form" method="POST" name="apply_form">
+                        <div class="form-group">
+                            <input type="text" id="mode" name="sub_type" hidden="true" value="{{ mode }}"/>
+                            <label class="col-sm-2 control-label no-padding-right" for="apply-id">编号</label>
+                            <div class="col-sm-6">
+                                <input type="text" id="apply-id" placeholder="编号（必填）" value="{{ apply.apply_id }}" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="tenant-name">姓名</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="tenant-name" placeholder="申请人姓名（必填）" value="{{ apply.tenant_name }}" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="sex" name="sex" hidden="true" value="{{ apply.sex }}"/>
+                            <label class="col-sm-2 control-label no-padding-right">性别</label>
+                            <div class="col-sm-1">
+                                <div class="radio">
+                                    <label>
+                                        <input name="sex-radio" id="man" type="radio" class="ace" value="男"/>
+                                        <span class="lbl">男</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="radio">
+                                    <label>
+                                        <input name="sex-radio" id="woman" type="radio" class="ace" value="女"/>
+                                        <span class="lbl">女</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="tenant-IDcode">身份证</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="tenant-IDcode" placeholder="身份证号码（必填）" value="{{ apply.tenant_IDcode }}" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="marital-status" hidden="true" value="{{ apply.marital_status }}"/>
+
+                            <label class="col-sm-2 control-label no-padding-right">婚姻状况</label>
+                            <div class="col-sm-1">
+                                <div class="radio">
+                                    <label>
+                                        <input name="marray-radio" id="married" type="radio" class="ace" value="已婚"/>
+                                        <span class="lbl">已婚</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="radio">
+                                    <label>
+                                        <input name="marray-radio" id="unmarried" type="radio" class="ace" value="单身"/>
+                                        <span class="lbl">单身</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="tenant-unit">工作单位</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="tenant-unit" placeholder="工作单位"  value="{{ apply.tenant_unit }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="tenant-unit-address">单位地址</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="tenant-unit-address" placeholder="单位地址"  value="{{ apply.tenant_unit_address }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">单位性质</label>
+                            <div class="col-sm-1">
+                                <input type="text" id="unit-pro-business" hidden="true" value="{{ apply.unit_pro_business }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="unitsort-checkbox" id="cb-unit-pro-business" type="checkbox" class="ace" />
+                                        <span class="lbl">企业</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="unit-pro-office" hidden="true" value="{{ apply.unit_pro_office }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="unitsort-checkbox" id="cb-unit-pro-office" type="checkbox" class="ace" />
+                                        <span class="lbl">机关事业单位</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="unit-pro-employment" hidden="true" value="{{ apply.unit_pro_employment }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="unitsort-checkbox" id="cb-unit-pro-employment" type="checkbox" class="ace" />
+                                        <span class="lbl">个体工商户</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <input type="text" id="unit-pro-retire" hidden="true" value="{{ apply.unit_pro_retire }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="unitsort-checkbox" id="cb-unit-pro-retire" type="checkbox" class="ace" />
+                                        <span class="lbl">离退休</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <input type="text" id="unit-pro-other" hidden="true" value="{{ apply.unit_pro_other }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="unitsort-checkbox" id="cb-unit-pro-other" type="checkbox" class="ace" />
+                                        <span class="lbl">其它</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="card-address">户口地址</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="card-address" placeholder="户口地址" value="{{ apply.card_address }}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="now-address">居住地址</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="now-address" placeholder="居住地址" value="{{ apply.now_address }}"class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">申请人类型</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-graduate" hidden="true" value="{{ apply.pro_graduate }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-graduate" type="checkbox" class="ace" />
+                                        <span class="lbl">新就业普通高校毕业生</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-outside" hidden="true" value="{{ apply.pro_outside }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-outside" type="checkbox" class="ace" />
+                                        <span class="lbl">外来务工人员</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-gov-talent" hidden="true" value="{{ apply.pro_gov_talent }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-gov-talent" type="checkbox" class="ace" />
+                                        <span class="lbl">政府引进特殊人才</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-difficult" hidden="true" value="{{ apply.pro_difficult }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-difficult" type="checkbox" class="ace" />
+                                        <span class="lbl">困难家庭</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-cheap" hidden="true" value="{{ apply.pro_cheap }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-cheap" type="checkbox" class="ace" />
+                                        <span class="lbl">廉租房保障家庭</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="pro-economy" hidden="true" value="{{ apply.pro_economy }}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" id="cb-pro-economy" type="checkbox" class="ace" />
+                                        <span class="lbl">经济房保障家庭</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="minimum-living-no">低保证号</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="minimum-living-no" placeholder="低保证号" value="{{ apply.minimum_living_no }}"
+                                       class="col-xs-10 col-sm-5"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="occur-date">申请日期</label>
+                            <div class="col-sm-2">
+                                <input class="date-picker" id="occur-date" type="text" value="{{ apply.occur_date }}"
+                                data-date-format="yyyy-mm-dd" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="remark">备注</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="remark" placeholder="备注" value="{{ apply.remark }}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="street-name">所属街道</label>
+                            <div class="col-sm-3">
+                                <select class="chosen-select" data-placeholder="" id="street-name">
+                                    <option value="{{ apply.street_name }}">{{ apply.street_name }}</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label no-padding-right" for="community-name">所属社区</label>
+                            <div class="col-sm-3">
+                                <select class="chosen-select" data-placeholder="" id="community-name">
+                                    <option value="{{ apply.community_name }}">{{ apply.community_name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">申请人家庭收入情况</h4>
+                <h6 class="widget-title">（单位：每平米、人、元）</h6>
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <label>家庭成员1</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_1 }}" id="member-name-1" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="关系" value="{{ apply.member_relation_1 }}" id="member-relation-1" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="身份证" value="{{ apply.member_ID_1 }}" id="member-ID-1" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="工作单位" value="{{ apply.member_unit_1 }}" id="member-unit-1" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入" value="{{ apply.member_income_1 }}" id="member-income-1" />
+                    </div>
+                    <br>
+                    <label>家庭成员2</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_2 }}" id="member-name-2" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="关系" value="{{ apply.member_relation_2 }}" id="member-relation-2" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="身份证" value="{{ apply.member_ID_2 }}" id="member-ID-2" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="工作单位" value="{{ apply.member_unit_2 }}" id="member-unit-2" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入" value="{{ apply.member_income_2 }}" id="member-income-2" />
+                    </div>
+                    <br>
+                    <label>家庭成员3</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_3 }}" id="member-name-3" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="关系" value="{{ apply.member_relation_3 }}" id="member-relation-3" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="身份证" value="{{ apply.member_ID_3 }}" id="member-ID-3" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="工作单位" value="{{ apply.member_unit_3 }}" id="member-unit-3" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入" value="{{ apply.member_income_3 }}" id="member-income-3" />
+                    </div>
+                    <br>
+                    <label>家庭成员4</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_4 }}" id="member-name-4" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="关系" value="{{ apply.member_relation_4 }}" id="member-relation-4" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="身份证" value="{{ apply.member_ID_4 }}" id="member-ID-4" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="工作单位" value="{{ apply.member_unit_4 }}" id="member-unit-4" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入" value="{{ apply.member_income_4 }}" id="member-income-4" />
+                    </div>
+                    <br>
+                    <label>家庭成员5</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_5 }}" id="member-name-5" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="关系" value="{{ apply.member_relation_5 }}" id="member-relation-5" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="身份证" value="{{ apply.member_ID_5 }}" id="member-ID-5" />
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="工作单位" value="{{ apply.member_unit_5 }}" id="member-unit-5" />
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入" value="{{ apply.member_income_5 }}" id="member-income-5" />
+                    </div>
+                    <hr/>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="家庭人均月收入" value="{{ apply.income_avg }}" id="income-avg" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="年收入合计" value="{{ apply.income_all }}" id="income-all" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">申请家庭成员住房情况</h4>
+                <h6 class="widget-title">（单位：每平米、人、元）</h6>
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <label>承租人或产权人</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_11 }}" id="member-name-11" />
+                    </div>
+                    <br>
+                    <div>
+                        <input class="form-control" type="text" placeholder="地址" value="{{ apply.member_address_11 }}" id="member-address-11" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="建筑面积" value="{{ apply.member_con_area_11 }}" id="member-con-area-11" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="住房性质" value="{{ apply.member_door_pro_11 }}" id="member-door-prop-11" />
+                    </div>
+                    <br>
+                    <label>承租人或产权人</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="姓名" value="{{ apply.member_name_12 }}" id="member-name-12" />
+                    </div>
+                    <br>
+                    <div>
+                        <input class="form-control" type="text" placeholder="地址" value="{{ apply.member_address_12 }}" id="member-address-12" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="建筑面积" value="{{ apply.member_con_area_12 }}" id="member-con-area-12" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="住房性质" value="{{ apply.member_door_pro_12 }}" id="member-door-prop-12" />
+                    </div>
+                    <hr/>
+                    <input type="text" id="is-transfer" hidden="true" value="{{ apply.is_transfer }}"/>
+                    <div class="checkbox">
+                        <label>
+                            <input name="form-field-checkbox" id="cb-is-transfer" type="checkbox" class="ace" />
+                            <span class="lbl">近五年有转让房屋情况</span>
+                        </label>
+                    </div>
+                    <div>
+                        <input class="form-control" type="text" placeholder="转让房屋地址" value="{{ apply.transfer_address_1 }}" id="transfer-address-1" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="转让房屋建筑面积" value="{{ apply.transfer_con_area_1 }}"
+                               id="transfer-con-area-1" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="转让房屋性质" value="{{ apply.transfer_pro_1 }}" id="transfer-pro-1" />
+                    </div>
+                    <input type="text" id="is-remove" hidden="true" value="{{ apply.is_remove }}"/>
+                    <div class="checkbox">
+                        <label>
+                            <input name="form-field-checkbox" id="cb-is-remove" type="checkbox" class="ace" />
+                            <span class="lbl">近五年有拆迁房屋情况</span>
+                        </label>
+                    </div>
+                    <br>
+                    <div>
+                        <input class="form-control" type="text" placeholder="拆迁房屋地址" value="{{ apply.remove_address_1 }}" id="remove-address-1" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="拆迁房屋建筑面积" value="{{ apply.remove_con_area_1 }}"
+                               id="remove-con-area-1" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="拆迁房屋性质" value="{{ apply.remove_pro_1 }}" id="remove-pro-1" />
+                    </div>
+                    <hr/>
+                    <label>家庭人均建筑面积</label>
+                    <div class="input-group">
+                        <input class="form-control text-right" type="number" placeholder="家庭人均建筑面积" value="{{ apply.con_area_avg }}"
+                               id="con-area-avg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    <div class="col-sm-6">-->
+<!--        <div class="widget-box">-->
+<!--            <div class="widget-header">-->
+<!--                <h4 class="widget-title">请选择上传的附件</h4>-->
+<!--                <div class="widget-toolbar">-->
+<!--                    <a href="#" data-action="collapse">-->
+<!--                        <i class="ace-icon fa fa-chevron-up"></i>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="widget-body">-->
+<!--                <div class="widget-main">-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-11" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-12" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-13" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-14" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-15" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-16" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="col-xs-12">-->
+<!--                            <input type="file" id="id-input-file-17" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <label>-->
+<!--                        请按顺序选择文件-->
+<!--&lt;!&ndash;                        <input type="checkbox" name="file-format" id="id-file-format" class="ace" />&ndash;&gt;-->
+<!--&lt;!&ndash;                        <span class="lbl"> Allow only images</span>&ndash;&gt;-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+</div><!-- /.page-content -->
+{% endblock %}
+{% block reference %}
+    <script src="{{ url_for('static', filename='js/apply.js') }}"></script>
+{% endblock %}
+{% block jsreference %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('#id-disable-check').on('click', function() {
+                var inp = $('#form-input-readonly').get(0);
+                if(inp.hasAttribute('disabled')) {
+                    inp.setAttribute('readonly' , 'true');
+                    inp.removeAttribute('disabled');
+                    inp.value="This text field is readonly!";
+                }
+                else {
+                    inp.setAttribute('disabled' , 'disabled');
+                    inp.removeAttribute('readonly');
+                    inp.value="This text field is disabled!";
+                }
+            });
+
+            $('[data-rel=tooltip]').tooltip({container:'body'});
+            $('[data-rel=popover]').popover({container:'body'});
+
+            autosize($('textarea[class*=autosize]'));
+
+            $('textarea.limited').inputlimiter({
+                remText: '%n character%s remaining...',
+                limitText: 'max allowed : %n.'
+            });
+
+            $.mask.definitions['~']='[+-]';
+            $('.input-mask-date').mask('99/99/9999');
+            $('.input-mask-phone').mask('(999) 999-9999');
+            $('.input-mask-eyescript').mask('~9.99 ~9.99 999');
+            $(".input-mask-product").mask("a*-999-a999",{placeholder:" ",completed:function(){alert("You typed the following: "+this.val());}});
+
+
+
+            $( "#input-size-slider" ).css('width','200px').slider({
+                value:1,
+                range: "min",
+                min: 1,
+                max: 8,
+                step: 1,
+                slide: function( event, ui ) {
+                    var sizing = ['', 'input-sm', 'input-lg', 'input-mini', 'input-small', 'input-medium', 'input-large', 'input-xlarge', 'input-xxlarge'];
+                    var val = parseInt(ui.value);
+                    $('#form-field-4').attr('class', sizing[val]).attr('placeholder', '.'+sizing[val]);
+                }
+            });
+
+            $( "#input-span-slider" ).slider({
+                value:1,
+                range: "min",
+                min: 1,
+                max: 12,
+                step: 1,
+                slide: function( event, ui ) {
+                    var val = parseInt(ui.value);
+                    $('#form-field-5').attr('class', 'col-xs-'+val).val('.col-xs-'+val);
+                }
+            });
+
+
+
+            //"jQuery UI Slider"
+            //range slider tooltip example
+            $( "#slider-range" ).css('height','200px').slider({
+                orientation: "vertical",
+                range: true,
+                min: 0,
+                max: 100,
+                values: [ 17, 67 ],
+                slide: function( event, ui ) {
+                    var val = ui.values[$(ui.handle).index()-1] + "";
+
+                    if( !ui.handle.firstChild ) {
+                        $("<div class='tooltip right in' style='display:none;left:16px;top:-6px;'><div class='tooltip-arrow'></div><div class='tooltip-inner'></div></div>")
+                        .prependTo(ui.handle);
+                    }
+                    $(ui.handle.firstChild).show().children().eq(1).text(val);
+                }
+            }).find('span.ui-slider-handle').on('blur', function(){
+                $(this.firstChild).hide();
+            });
+
+
+            $( "#slider-range-max" ).slider({
+                range: "max",
+                min: 1,
+                max: 10,
+                value: 2
+            });
+
+            $( "#slider-eq > span" ).css({width:'90%', 'float':'left', margin:'15px'}).each(function() {
+                // read initial values from markup and remove that
+                var value = parseInt( $( this ).text(), 10 );
+                $( this ).empty().slider({
+                    value: value,
+                    range: "min",
+                    animate: true
+
+                });
+            });
+
+            $("#slider-eq > span.ui-slider-purple").slider('disable');//disable third item
+
+
+            $('#id-input-file-1 , #id-input-file-2').ace_file_input({
+                no_file:'No File ...',
+                btn_choose:'Choose',
+                btn_change:'Change',
+                droppable:false,
+                onchange:null,
+                thumbnail:false //| true | large
+                //whitelist:'gif|png|jpg|jpeg'
+                //blacklist:'exe|php'
+                //onchange:''
+                //
+            });
+            //pre-show a file name, for example a previously selected file
+            //$('#id-input-file-1').ace_file_input('show_file_list', ['myfile.txt'])
+
+
+            $('#id-input-file-3').ace_file_input({
+                style: 'well',
+                btn_choose: 'Drop files here or click to choose',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-cloud-upload',
+                droppable: true,
+                thumbnail: 'small'//large | fit
+                //,icon_remove:null//set null, to hide remove/reset button
+                /**,before_change:function(files, dropped) {
+                    //Check an example below
+                    //or examples/file-upload.html
+                    return true;
+                }*/
+                /**,before_remove : function() {
+                    return true;
+                }*/
+                ,
+                preview_error : function(filename, error_code) {
+                    //name of the file that failed
+                    //error_code values
+                    //1 = 'FILE_LOAD_FAILED',
+                    //2 = 'IMAGE_LOAD_FAILED',
+                    //3 = 'THUMBNAIL_FAILED'
+                    //alert(error_code);
+                }
+
+            }).on('change', function(){
+                //console.log($(this).data('ace_input_files'));
+                //console.log($(this).data('ace_input_method'));
+            });
+
+
+            //$('#id-input-file-3')
+            //.ace_file_input('show_file_list', [
+                //{type: 'image', name: 'name of image', path: 'http://path/to/image/for/preview'},
+                //{type: 'file', name: 'hello.txt'}
+            //]);
+
+
+
+
+            //dynamically change allowed formats by changing allowExt && allowMime function
+            $('#id-file-format').removeAttr('checked').on('change', function() {
+                var whitelist_ext, whitelist_mime;
+                var btn_choose
+                var no_icon
+                if(this.checked) {
+                    btn_choose = "Drop images here or click to choose";
+                    no_icon = "ace-icon fa fa-picture-o";
+
+                    whitelist_ext = ["jpeg", "jpg", "png", "gif" , "bmp"];
+                    whitelist_mime = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"];
+                }
+                else {
+                    btn_choose = "Drop files here or click to choose";
+                    no_icon = "ace-icon fa fa-cloud-upload";
+
+                    whitelist_ext = null;//all extensions are acceptable
+                    whitelist_mime = null;//all mimes are acceptable
+                }
+                var file_input = $('#id-input-file-3');
+                file_input
+                .ace_file_input('update_settings',
+                {
+                    'btn_choose': btn_choose,
+                    'no_icon': no_icon,
+                    'allowExt': whitelist_ext,
+                    'allowMime': whitelist_mime
+                })
+                file_input.ace_file_input('reset_input');
+
+                file_input
+                .off('file.error.ace')
+                .on('file.error.ace', function(e, info) {
+                    //console.log(info.file_count);//number of selected files
+                    //console.log(info.invalid_count);//number of invalid files
+                    //console.log(info.error_list);//a list of errors in the following format
+
+                    //info.error_count['ext']
+                    //info.error_count['mime']
+                    //info.error_count['size']
+
+                    //info.error_list['ext']  = [list of file names with invalid extension]
+                    //info.error_list['mime'] = [list of file names with invalid mimetype]
+                    //info.error_list['size'] = [list of file names with invalid size]
+
+
+                    /**
+                    if( !info.dropped ) {
+                        //perhapse reset file field if files have been selected, and there are invalid files among them
+                        //when files are dropped, only valid files will be added to our file array
+                        e.preventDefault();//it will rest input
+                    }
+                    */
+
+
+                    //if files have been selected (not dropped), you can choose to reset input
+                    //because browser keeps all selected files anyway and this cannot be changed
+                    //we can only reset file field to become empty again
+                    //on any case you still should check files with your server side script
+                    //because any arbitrary file can be uploaded by user and it's not safe to rely on browser-side measures
+                });
+
+            });
+
+            $('#spinner1').ace_spinner({value:0,min:0,max:200,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
+            .closest('.ace-spinner')
+            .on('changed.fu.spinbox', function(){
+                //console.log($('#spinner1').val())
+            });
+            $('#spinner2').ace_spinner({value:0,min:0,max:10000,step:100, touch_spinner: true, icon_up:'ace-icon fa fa-caret-up bigger-110', icon_down:'ace-icon fa fa-caret-down bigger-110'});
+            $('#spinner3').ace_spinner({value:0,min:-100,max:100,step:10, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+            $('#spinner4').ace_spinner({value:0,min:-100,max:100,step:10, on_sides: true, icon_up:'ace-icon fa fa-plus', icon_down:'ace-icon fa fa-minus', btn_up_class:'btn-purple' , btn_down_class:'btn-purple'});
+
+            //$('#spinner1').ace_spinner('disable').ace_spinner('value', 11);
+            //or
+            //$('#spinner1').closest('.ace-spinner').spinner('disable').spinner('enable').spinner('value', 11);//disable, enable or change value
+            //$('#spinner1').closest('.ace-spinner').spinner('value', 0);//reset to 0
+
+
+            //datepicker plugin
+            //link
+            $('.date-picker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            })
+            //show datepicker when clicking on the icon
+            .next().on(ace.click_event, function(){
+                $(this).prev().focus();
+            });
+
+            //or change it into a date range picker
+            $('.input-daterange').datepicker({autoclose:true});
+
+
+            //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
+            $('input[name=date-range-picker]').daterangepicker({
+                'applyClass' : 'btn-sm btn-success',
+                'cancelClass' : 'btn-sm btn-default',
+                locale: {
+                    applyLabel: 'Apply',
+                    cancelLabel: 'Cancel',
+                }
+            })
+            .prev().on(ace.click_event, function(){
+                $(this).next().focus();
+            });
+
+            if(!ace.vars['old_ie']) $('#date-timepicker1').datetimepicker({
+             //format: 'MM/DD/YYYY h:mm:ss A',//use this option to display seconds
+             icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-arrows ',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+             }
+            }).next().on(ace.click_event, function(){
+                $(this).prev().focus();
+            });
+
+
+            $('#colorpicker1').colorpicker();
+            //$('.colorpicker').last().css('z-index', 2000);//if colorpicker is inside a modal, its z-index should be higher than modal'safe
+
+            $('#simple-colorpicker-1').ace_colorpicker();
+            //$('#simple-colorpicker-1').ace_colorpicker('pick', 2);//select 2nd color
+            //$('#simple-colorpicker-1').ace_colorpicker('pick', '#fbe983');//select #fbe983 color
+            //var picker = $('#simple-colorpicker-1').data('ace_colorpicker')
+            //picker.pick('red', true);//insert the color if it doesn't exist
+
+
+            $(".knob").knob();
+
+
+            var tag_input = $('#form-field-tags');
+            try{
+                tag_input.tag(
+                  {
+                    placeholder:tag_input.attr('placeholder'),
+                    //enable typeahead by specifying the source array
+                    source: ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
+                    /**
+                    //or fetch data from database, fetch those that match "query"
+                    source: function(query, process) {
+                      $.ajax({url: 'remote_source.php?q='+encodeURIComponent(query)})
+                      .done(function(result_items){
+                        process(result_items);
+                      });
+                    }
+                    */
+                  }
+                )
+
+                //programmatically add/remove a tag
+                var $tag_obj = $('#form-field-tags').data('tag');
+                $tag_obj.add('Programmatically Added');
+
+                var index = $tag_obj.inValues('some tag');
+                $tag_obj.remove(index);
+            }
+            catch(e) {
+                //display a textarea for old IE, because it doesn't support this plugin or another one I tried!
+                tag_input.after('<textarea id="'+tag_input.attr('id')+'" name="'+tag_input.attr('name')+'" rows="3">'+tag_input.val()+'</textarea>').remove();
+                //autosize($('#form-field-tags'));
+            }
+
+
+            /////////
+            $('#modal-form input[type=file]').ace_file_input({
+                style:'well',
+                btn_choose:'Drop files here or click to choose',
+                btn_change:null,
+                no_icon:'ace-icon fa fa-cloud-upload',
+                droppable:true,
+                thumbnail:'large'
+            })
+
+            //chosen plugin inside a modal will have a zero width because the select element is originally hidden
+            //and its width cannot be determined.
+            //so we set the width after modal is show
+            $('#modal-form').on('shown.bs.modal', function () {
+                if(!ace.vars['touch']) {
+                    $(this).find('.chosen-container').each(function(){
+                        $(this).find('a:first-child').css('width' , '210px');
+                        $(this).find('.chosen-drop').css('width' , '210px');
+                        $(this).find('.chosen-search input').css('width' , '200px');
+                    });
+                }
+            })
+            /**
+            //or you can activate the chosen plugin after modal is shown
+            //this way select element becomes visible with dimensions and chosen works as expected
+            $('#modal-form').on('shown', function () {
+                $(this).find('.modal-chosen').chosen();
+            })
+            */
+
+
+
+            $(document).one('ajaxloadstart.page', function(e) {
+                autosize.destroy('textarea[class*=autosize]')
+
+                $('.limiterBox,.autosizejs').remove();
+                $('.daterangepicker.dropdown-menu,.colorpicker.dropdown-menu,.bootstrap-datetimepicker-widget.dropdown-menu').remove();
+            });
+
+        });
+</script>
+{% endblock %}
