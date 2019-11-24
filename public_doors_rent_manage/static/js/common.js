@@ -37,7 +37,7 @@ function get_now_formatdate() {
     }
     var currentdate = year + seperator1 + month + seperator1 + strDate;
     return currentdate;
-}
+};
 /*
 查询申请审批表
 */
@@ -47,3 +47,55 @@ $.search_apply_table = function(apply_id, mode) {
     }
     window.location.href = "/approve?mode=" + mode + "&apply_id=" + apply_id
 };
+/*
+修改密码
+*/
+$.change_password = function(old_pw, new_pw1, new_pw2) {
+    if (old_pw == "") {
+        alert("请输入原密码！");
+        return;
+    }
+    if (new_pw1 == "" || new_pw2 == "") {
+        alert("请输入新密码！");
+        return;
+    }
+    if (new_pw1 != new_pw2) {
+        alert("两次新密码输入不一致！");
+        return;
+    }
+    $.ajax({
+        url: "/common",
+        type: "post",
+        dataType: "json",
+        headers: {
+        "opt_type": "change_password",
+        "token": localStorage.getItem("token")
+        },
+        data: {
+        "old_pw": old_pw,
+        "new_pw": new_pw1
+        },
+        success: function(data) {
+            if (String(data.status) == "success") {
+                alert("修改完成！");
+            }
+            else if (String(data.status) == "expired") {
+                alert(String(data.info));
+                window.location.href = "/login";
+            }
+            else if (String(data.status) == "error") {
+                alert(String(data.info));
+            }
+            else {
+                alert("修改密码失败！" + String(data.info));
+            }
+        }
+    });
+};
+/*
+注销
+*/
+$.logout = function() {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+}

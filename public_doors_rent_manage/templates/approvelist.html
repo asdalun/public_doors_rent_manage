@@ -162,8 +162,6 @@
                 }
             } );
 
-
-
             $.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 
             new $.fn.dataTable.Buttons( myTable, {
@@ -212,7 +210,6 @@
                 $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
             });
 
-
             var defaultColvisAction = myTable.button(0).action();
             myTable.button(0).action(function (e, dt, button, config) {
 
@@ -226,7 +223,6 @@
                 }
                 $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
             });
-
             ////
 
             setTimeout(function() {
@@ -270,15 +266,11 @@
                 else myTable.row(row).select();
             });
 
-
-
             $(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
                 e.preventDefault();
             });
-
-
 
             //And for the first simple table, which doesn't have TableTools or dataTables
             //select/deselect all rows according to table header checkbox
@@ -353,7 +345,6 @@
             //or change it into a date range picker
             $('.input-daterange').datepicker({autoclose:true});
 
-
             //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
             $('input[name=date-range-picker]').daterangepicker({
                 'applyClass' : 'btn-sm btn-success',
@@ -412,8 +403,6 @@
                 $(this).find('.modal-chosen').chosen();
             })
             */
-
-
 
             $(document).one('ajaxloadstart.page', function(e) {
                 autosize.destroy('textarea[class*=autosize]')

@@ -5,6 +5,12 @@ $(document).ready(function() {
     if (mode == "search") {
         $("#btn-show-approve").hide();
     }
+    else if (mode == "street") {
+        $("#search-title").text("街道审批信息");
+    }
+    else if (mode == "dept") {
+        $("#search-title").text("局审批信息");
+    }
     var unit_pro = "";
     if ($("#unit-pro-business").text() == "1") {
         unit_pro += "企业；";
@@ -95,8 +101,9 @@ $.approve = function() {
     if (mode == "street") {
         $.approve_street()
     }
-    else if (mode == "dept") {
 
+    else if (mode == "dept") {
+        $.approve_dept()
     }
 };
 /*
@@ -155,7 +162,7 @@ $.approve_dept = function() {
         },
         data: {
         "apply_id": apply_id,
-        "street_approve_remark": street_approve_remark
+        "dept_approve_remark": street_approve_remark
         },
         success: function(data) {
             if (String(data.status) == "success") {
@@ -169,9 +176,6 @@ $.approve_dept = function() {
             else if (String(data.status) == "state") {
                 alert(String(data.info));
                 $.search_apply_table(apply_id, "dept");
-            }
-            else if (String(data.status) == "street") {
-                alert(String(data.info));
             }
             else {
                 alert("局审批失败！" + String(data.info))

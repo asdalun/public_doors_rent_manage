@@ -14,9 +14,12 @@ class ApplyListView(MethodView):
                  "CONVERT(varchar(10), occur_date, 120) as occur_date, state_str, remark from v_public_doors_apply " + \
                  "order by occur_date"
             db = DB()
-            applylist = db.get_data_by_sql(wl)
-            return render_template('applylist.html', menu0='active open', menu0_2='active', pagename='申请信息列表',
-                                   applylist=applylist)
+            applylist, re_s = db.get_data_by_sql(wl)
+            if re_s == '':
+                return render_template('applylist.html', menu0='active open', menu0_2='active', pagename='申请信息列表',
+                                       applylist=applylist)
+            else:
+                return render_template('error.html', errorinfo=re_s)
         elif mode == 'search':
             s_date = request.args.get('s_date')
             e_date = request.args.get('e_date')
@@ -26,10 +29,12 @@ class ApplyListView(MethodView):
                  "CONVERT(varchar(10), occur_date, 120) <= '" + e_date + "' " + \
                  "order by occur_date"
             db = DB()
-            print(wl)
-            applylist = db.get_data_by_sql(wl)
-            return render_template('applylist.html', menu0='active open', menu0_2='active', pagename='申请信息列表',
-                                   applylist=applylist)
+            applylist, re_s = db.get_data_by_sql(wl)
+            if re_s == '':
+                return render_template('applylist.html', menu0='active open', menu0_2='active', pagename='申请信息列表',
+                                       applylist=applylist)
+            else:
+                return render_template('error.html', errorinfo=re_s)
 
     def post(self):
         token = request.headers.get('token')
@@ -40,10 +45,10 @@ class ApplyListView(MethodView):
             return jsonify(result)
         params = (request.values.get('apply_id', ''))
         db = DB()
-        re_data = db.run_proc('del_apply', params)
+        re_data, re_s = db.run_proc('del_apply', params)
         if re_data == 0:
             return jsonify({'status': 'success'})
         elif re_data == 2:
             return jsonify({'status': 'approve'})
         else:
-            return jsonify({'status': 'fail', 'info': '删除申请信息失败！'})
+            return jsonify({'status': 'fail', 'info': '删除申请信息失败！' + re_s})

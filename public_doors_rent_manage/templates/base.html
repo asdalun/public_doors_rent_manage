@@ -82,9 +82,9 @@
 					<li class="light-blue dropdown-modal">
 						<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 							<img class="nav-user-photo" src="{{ url_for('static', filename='images/avatars/user.jpg') }}" alt="Jason's Photo" />
-							<span class="user-info">
+							<span class="user-info" id="user-name">
 								<small>欢迎,</small>
-								Jason
+								gogogo
 							</span>
 
 							<i class="ace-icon fa fa-caret-down"></i>
@@ -248,7 +248,7 @@
 						</li>
 
 						<li class="{{ menu1_4 }}">
-							<a href="jqgrid.html">
+							<a href="/approvelist?mode=dept">
 								<i class="menu-icon fa fa-caret-right"></i>
 								住建局审批查询
 							</a>
@@ -267,22 +267,22 @@
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="{{ menu2_1 }}">
-							<a href="form-elements.html">
+							<a href="/reports?mode=applyreport">
 								<i class="menu-icon fa fa-caret-right"></i>
-								已申请明细表
+								申请明细表
 							</a>
 
 							<b class="arrow"></b>
 						</li>
 
-						<li class="{{ menu2_2 }}">
-							<a href="form-elements-2.html">
-								<i class="menu-icon fa fa-caret-right"></i>
-								已通过明细表
-							</a>
+<!--						<li class="{{ menu2_2 }}">-->
+<!--							<a href="form-elements-2.html">-->
+<!--								<i class="menu-icon fa fa-caret-right"></i>-->
+<!--								已通过明细表-->
+<!--							</a>-->
 
-							<b class="arrow"></b>
-						</li>
+<!--							<b class="arrow"></b>-->
+<!--						</li>-->
 					</ul>
 				</li>
 
@@ -295,16 +295,16 @@
 					<b class="arrow"></b>
 					<ul class="submenu">
 						<li class="{{ menu3_1 }}">
-							<a href="form-elements.html">
+							<a href="#">
 								<i class="menu-icon fa fa-caret-right"></i>
-								系统设置
+								操作员维护
 							</a>
 
 							<b class="arrow"></b>
 						</li>
 
 						<li class="{{ menu3_2 }}">
-							<a href="form-elements-2.html">
+							<a href="/common?mode=changepw">
 								<i class="menu-icon fa fa-caret-right"></i>
 								修改密码
 							</a>
@@ -312,7 +312,7 @@
 							<b class="arrow"></b>
 						</li>
 						<li class="{{ menu3_3 }}">
-							<a href="form-elements-2.html">
+							<a href="#" onclick="$.logout()">
 								<i class="menu-icon fa fa-caret-right"></i>
 								注销
 							</a>

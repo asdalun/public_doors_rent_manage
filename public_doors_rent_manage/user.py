@@ -23,17 +23,19 @@ class User:
         wl = "select id, user_sort, dept from t_users where user_name = '" + self._username + "' " + \
              "and password = '" + self._password + "'"
         db = DB()
-        re_data = db.get_data_by_sql(wl)
-        if len(re_data) != 1:
-            print("not found user")
-            self._username = ''
-            self._password = ''
-            self._dept = ''
-            return 'error'
+        re_datas, re_s = db.get_data_by_sql(wl)
+        if re_datas is None:
+            return re_s
         else:
-            self._usersort = re_data[0]['user_sort']
-            self._dept = re_data[0]['dept']
-            return 'ok'
+            if len(re_datas) != 1:
+                self._username = ''
+                self._password = ''
+                self._dept = ''
+                return 'error'
+            else:
+                self._usersort = re_datas[0]['user_sort']
+                self._dept = re_datas[0]['dept']
+                return 'ok'
 
     def generate_token(self):
         """
@@ -55,7 +57,6 @@ class User:
             'exp': exp,
             'refresh_exp': refresh_exp
         }
-        print('start:')
         print(payload)
         return jwt.encode(payload, current_app.secret_key, algorithm='HS512').decode('utf-8')
 
@@ -75,7 +76,6 @@ class User:
             payload = jwt.decode(self._token, current_app.secret_key, verify=True,
                                  algorithms='HS512', options=options,
                                  require_exp=True)
-            print('end:')
             print(payload)
         except jwt.InvalidTokenError as ex:
             print('the error is: ' + str(ex))
@@ -106,7 +106,7 @@ class User:
         """
         wl = "select community from t_users where user_name = '" + self._username + "'"
         db = DB()
-        re_datas = db.get_data_by_sql(wl)
+        re_datas, re_s = db.get_data_by_sql(wl)
         if len(re_datas) != 1:
             return ''
         else:
@@ -119,7 +119,7 @@ class User:
         """
         wl = "select street from t_users where user_name = '" + self._username + "'"
         db = DB()
-        re_datas = db.get_data_by_sql(wl)
+        re_datas, re_s = db.get_data_by_sql(wl)
         if len(re_datas) != 1:
             return ''
         else:

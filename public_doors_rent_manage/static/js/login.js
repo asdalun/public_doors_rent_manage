@@ -100,13 +100,18 @@ $(function(){
             headers: {"token": ""},
             data:{"username": _username, "password": _password},
             success: function(data){
+                console.log(String(data.status));
                 if (String(data.status) == "success") {
                     localStorage.setItem("token", data.token);
                     window.location.href = "/index";
                 }
+                else if (String(data.status) == "fail") {
+                    $("#logintext").text(String(data.info));
+                    localStorage.removeItem("token");
+                }
                 else {
                     //alert("登录失败！用户名或密码错误！");
-                    $("#logintext").text("用户名或密码错误");
+                    $("#logintext").text("发生错误：" + String(data.info));
                     localStorage.removeItem("token");
                 }
             }

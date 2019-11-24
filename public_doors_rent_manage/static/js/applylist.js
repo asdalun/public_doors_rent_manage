@@ -1,8 +1,8 @@
 
 $(document).ready(function() {
     $("#menu-0-2").addClass("dropdown-toggle");
-    $("#s-occur-date").val(get_now_formatdate())
-    $("#e-occur-date").val(get_now_formatdate())
+    $("#s-occur-date").val(get_now_formatdate());
+    $("#e-occur-date").val(get_now_formatdate());
     if (verify_token() == "error") {
         window.location.href = "/login";
     }
@@ -15,14 +15,14 @@ $.search_apply_list = function() {
     var s_date = $("#s-occur-date").val();
     var e_date = $("#e-occur-date").val();
     window.location.href = "/applylist?mode=search&s_date=" + s_date + "&e_date=" + e_date;
-}
+};
 
 /*
 查询申请信息
 */
 $.search_apply_all = function() {
     window.location.href = "/applylist";
-}
+};
 
 /*
 跳转修改申请页面

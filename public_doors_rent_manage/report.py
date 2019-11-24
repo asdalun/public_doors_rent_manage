@@ -57,7 +57,7 @@ def test3():
          "transfer_pro_1, remove_pro_1 " + \
          "FROM t_public_doors_apply where apply_id = '001'"
     db = DB()
-    apply = db.get_data_by_sql(wl)
+    apply, re_s = db.get_data_by_sql(wl)
     if len(apply) == 0:
         return 'not found'
     pdfmetrics.registerFont(TTFont('simsun', 'SimSun.ttf'))

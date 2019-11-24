@@ -38,13 +38,19 @@ class DB:
         """
         按查询语句查询出数据集，并返回数据集
         :param sel_sql:   查询语句
-        :return:          查询结果
+        :return:          查询结果; 错误字符串
         """
-        with self.get_conn_pymssql() as conn:
-            with conn.cursor(as_dict=True) as cur:
-                cur.execute(sel_sql)
-                rows = cur.fetchall()
-                return rows
+        re_datas = None
+        re_s = ''
+        try:
+            with self.get_conn_pymssql() as conn:
+                with conn.cursor(as_dict=True) as cur:
+                    cur.execute(sel_sql)
+                    re_datas = cur.fetchall()
+        except Exception as e:
+            re_s = 'mssql error: ' + str(e)
+        finally:
+            return re_datas, re_s
 
     def execute_sql(self, exe_sql):
         """
@@ -100,14 +106,14 @@ class DB:
         sqlcmd += """
         SELECT @re
         """
+        re_s = ''
         try:
             re = conn.execute_scalar(sqlcmd)
-        except _mssql.MssqlDatabaseException as e:
+        except Exception as e:
             print('调用存储过程失败：' + proc_name + ' ' + str(e))
-            return 1
+            re_s = str(e)
         finally:
-            conn.close()
-            return re
+            return re, re_s
 
     def get_run_proc(self, proc_name, params=None):
         conn = self.get_conn_mssql()
@@ -141,7 +147,7 @@ if __name__ == '__main__':
     # da = db.get_data_by_sql(wl)
     # print(da)
     params = ('005', 'dalun', '系统管理员', '', '1')
-    re_data = db.run_proc('add_user', params)
+    re_data, re_s = db.run_proc('add_user', params)
     print(re_data)
     # print("hello 222")
     # params = ('%', '%')

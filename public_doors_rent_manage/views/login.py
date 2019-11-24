@@ -13,13 +13,16 @@ class LoginView(MethodView):
         password = request.form['password']
         user = User(username, password, '')
         re = user.verify_password()
-        print(re)
+        print('the result is: ' + re)
         if re == 'ok':
             token = user.generate_token()
             print('token: ' + token)
             re_data = {'status': 'success', 'token': token}
+        elif re == 'error':
+            print('is error')
+            re_data = {'status': 'fail', 'token': '', 'info': '用户名或密码错误！'}
         else:
-            re_data = {'status': 'fail', 'token': ''}
+            re_data = {'status': 'error', 'token': '', 'info': re}
         return jsonify(re_data)
 
         # token = request.headers.get('token')

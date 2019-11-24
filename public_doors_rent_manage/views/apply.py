@@ -31,9 +31,12 @@ class ApplyView(MethodView):
                  "community_name, street_name, remark " + \
                  "from t_public_doors_apply where apply_id = '" + apply_id + "'"
             db = DB()
-            apply = db.get_data_by_sql(wl)
-            return render_template('apply.html', apply=apply[0], mode=mode, menu0='active open', menu0_1='active',
-                                   pagename='编辑申请信息')
+            apply, re_s = db.get_data_by_sql(wl)
+            if re_s == '':
+                return render_template('apply.html', apply=apply[0], mode=mode, menu0='active open', menu0_1='active',
+                                       pagename='编辑申请信息')
+            else:
+                return render_template('error.html', errorinfo=re_s)
         elif mode == 'show':
             apply_id = request.args.get('apply_id') or ''
             wl = "select apply_id, tenant_name, sex, tenant_IDcode, marital_status, tenant_unit, tenant_unit_address, " + \
@@ -51,9 +54,13 @@ class ApplyView(MethodView):
                  "community_name, street_name, remark " + \
                  "from t_public_doors_apply where apply_id = '" + apply_id + "'"
             db = DB()
-            apply = db.get_data_by_sql(wl)
-            return render_template('apply.html', apply=apply[0], mode=mode, menu0='active open', menu0_1='active',
-                                   pagename='查看申请信息')
+            apply, re_s = db.get_data_by_sql(wl)
+            if re_s == '':
+                return render_template('apply.html', apply=apply[0], mode=mode, menu0='active open', menu0_1='active',
+                                       pagename='查看申请信息')
+            else:
+                return render_template('error.html', errorinfo=re_s)
+
 
     def post(self):
         token = request.headers.get('token')
@@ -137,10 +144,11 @@ class ApplyView(MethodView):
 
         db = DB()
         re_data = None
+        re_s = ''
         if sub_type == 'add':
-            re_data = db.run_proc('add_apply', params)
+            re_data, re_s = db.run_proc('add_apply', params)
         elif sub_type == 'edit':
-            re_data = db.run_proc('edit_apply', params)
+            re_data, re_s = db.run_proc('edit_apply', params)
         if int(re_data) == 0:
             result = {'status': 'success'}
             return jsonify(result)
@@ -148,5 +156,5 @@ class ApplyView(MethodView):
             result = {'status': 'repeat'}
             return jsonify(result)
         else:
-            result = {'status': 'fail', 'info': 'database error'}
+            result = {'status': 'fail', 'info': re_s}
             return jsonify(result)

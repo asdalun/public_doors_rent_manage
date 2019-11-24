@@ -1,32 +1,188 @@
 {% extends "base.html" %}
 {% block optbuttons %}
-<div class="nav-search" id="nav-search">
-    <span class="input-icon">
-        <input type="text" placeholder="审批表编号" class="nav-search-input" id="apply-id" autocomplete="off" />
-        <i class="ace-icon fa fa-search nav-search-icon"></i>
-    </span>
-    <button class="width-15 btn btn-sm btn-primary" id="btn-search" onclick="$.search_apply_table($('#apply-id').val(), 'search')">
+    <button class="width-15 btn btn-sm btn-primary" data-toggle="modal" data-target="#search-modal">
         <i class="ace-icon fa fa-search"></i>
         <span class="bigger-110">查询</span>
     </button>
-</div><!-- /.nav-search -->
+    <button class="width-15 btn btn-sm btn-primary" onclick="$.search_applylist_all()">
+        <i class="ace-icon fa fa-book"></i>
+        <span class="bigger-110">全部</span>
+    </button>
 {% endblock %}
 {% block pagecontent %}
 <div class="page-content">
-    <div class="panel-body">
-        <a id="pdf" class="media" href="{{ report_name }}"></a>
+<!--    <div class="panel-body">-->
+<!--        <a id="pdf" class="media" href="{{ report_name }}"></a>-->
+<!--    </div>-->
+    <div id="pdf-info">
+    <br><br>
+    <table class="applylist-table" border="1" align="center" width="900" id="table1">
+        <h1 align="center">立山区申请公共租赁租房明细表</h1>
+        <br>
+        <h4 id="report-info" align="center">{{ reportinfo }}</h4>
+        <tr height="30" align="center">
+            <td width="80">申请编号</td>
+            <td width="50">姓名</td>
+            <td width="30">性别</td>
+            <td width="120">身份证</td>
+            <td width="190">工作单位</td>
+            <td width="190">地址</td>
+            <td width="150">所在社区</td>
+            <td width="90">申请日期</td>
+        </tr>
+        {% for apply in applylist %}
+        <tr>
+            <td>{{ apply.apply_id }}</td>
+            <td>{{ apply.tenant_name }}</td>
+            <td align="center">{{ apply.sex }}</td>
+            <td>{{ apply.tenant_IDcode }}</td>
+            <td>{{ apply.tenant_unit }}</td>
+            <td>{{ apply.now_address }}</td>
+            <td>{{ apply.community_name }}</td>
+            <td align="center">{{ apply.occur_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
     </div>
 </div>
 <!-- /.page-content -->
 {% endblock %}
-{% block reference %}
-    <script src="{{ url_for('static', filename='js/applyreport.js') }}"></script>
+{% block search %}
+<!-- 查询modal块 -->
+    <div class="modal fade" id="search-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h4>查询条件</h4>
+            </div>
+            <div class="modal-body">
+                <form name="searchHouseRentForm" role="form" method="POST">
+                    <div class="row">
+                        <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="s-occur-date">申请日期 从</label>
+                            <div>
+                                <input class="date-picker" id="s-occur-date" type="text"
+                                data-date-format="yyyy-mm-dd" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="e-occur-date">到</label>
+                            <div>
+                                <input class="date-picker" id="e-occur-date" type="text"
+                                data-date-format="yyyy-mm-dd" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="state-str">审批状态</label>
+                            <select class="chosen-select form-control" data-placeholder="" id="state-str">
+                                <option value="全部">全部</option>
+                                <option value="未审批">未审批</option>
+                                <option value="街道已审批">街道已审批</option>
+                                <option value="已通过">已通过</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="width-35 pull-right btn btn-sm btn-primary" onclick="$.search_applylist_report()">
+                    <i class="ace-icon fa fa-search"></i>
+                    <span class="bigger-110">查询</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block jsreference %}
-<script type="text/javascript">
-$(function() {
-    $('a.media').media({width:900, height:600});
-    $('a.mediase').media({width:900, height:600});
-});
-</script>
+    <script type="text/javascript">
+        jQuery(function($) {
+
+            //datepicker plugin
+            //link
+            $('.date-picker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            })
+            //show datepicker when clicking on the icon
+            .next().on(ace.click_event, function(){
+                $(this).prev().focus();
+            });
+
+            //or change it into a date range picker
+            $('.input-daterange').datepicker({autoclose:true});
+
+            //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
+            $('input[name=date-range-picker]').daterangepicker({
+                'applyClass' : 'btn-sm btn-success',
+                'cancelClass' : 'btn-sm btn-default',
+                locale: {
+                    applyLabel: 'Apply',
+                    cancelLabel: 'Cancel',
+                }
+            })
+            .prev().on(ace.click_event, function(){
+                $(this).next().focus();
+            });
+
+            if(!ace.vars['old_ie']) $('#date-timepicker1').datetimepicker({
+             //format: 'MM/DD/YYYY h:mm:ss A',//use this option to display seconds
+             icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-arrows ',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+             }
+            }).next().on(ace.click_event, function(){
+                $(this).prev().focus();
+            });
+            /////////
+            $('#modal-form input[type=file]').ace_file_input({
+                style:'well',
+                btn_choose:'Drop files here or click to choose',
+                btn_change:null,
+                no_icon:'ace-icon fa fa-cloud-upload',
+                droppable:true,
+                thumbnail:'large'
+            })
+
+            //chosen plugin inside a modal will have a zero width because the select element is originally hidden
+            //and its width cannot be determined.
+            //so we set the width after modal is show
+            $('#modal-form').on('shown.bs.modal', function () {
+                if(!ace.vars['touch']) {
+                    $(this).find('.chosen-container').each(function(){
+                        $(this).find('a:first-child').css('width' , '210px');
+                        $(this).find('.chosen-drop').css('width' , '210px');
+                        $(this).find('.chosen-search input').css('width' , '200px');
+                    });
+                }
+            })
+            /**
+            //or you can activate the chosen plugin after modal is shown
+            //this way select element becomes visible with dimensions and chosen works as expected
+            $('#modal-form').on('shown', function () {
+                $(this).find('.modal-chosen').chosen();
+            })
+            */
+
+            $(document).one('ajaxloadstart.page', function(e) {
+                autosize.destroy('textarea[class*=autosize]')
+
+                $('.limiterBox,.autosizejs').remove();
+                $('.daterangepicker.dropdown-menu,.colorpicker.dropdown-menu,.bootstrap-datetimepicker-widget.dropdown-menu').remove();
+            });
+
+        })
+    </script>
+{% endblock %}
+{% block reference %}
+    <script src="{{ url_for('static', filename='js/applyreport.js') }}"></script>
 {% endblock %}

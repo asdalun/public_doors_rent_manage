@@ -44,7 +44,7 @@ def get_apply_table(apply_id):
          "transfer_pro_1, remove_pro_1 " + \
          "FROM t_public_doors_apply where apply_id = '" + apply_id + "'"
     db = DB()
-    apply = db.get_data_by_sql(wl)
+    apply, re_s = db.get_data_by_sql(wl)
     if len(apply) == 0:
         return 'not found'
     pdfmetrics.registerFont(TTFont('simsun', 'SimSun.ttf'))
@@ -252,13 +252,47 @@ class ReportView(MethodView):
     """报表请求页面
     """
     def get(self):
-        apply_id = request.args.get('apply_id', '')
-        if apply_id == '':
-            return render_template('applyreport.html', menu0='active open', menu0_3='active', pagename='申请审批表')
-        else:
-            report_name = get_apply_table(apply_id)
-            return render_template('applyreport.html', menu0='active open', menu0_3='active', pagename='申请审批表',
-                                   report_name=report_name)
+        # apply_id = request.args.get('apply_id', '')
+        # if apply_id == '':
+        #     return render_template('applyreport.html', menu0='active open', menu0_3='active', pagename='申请审批表')
+        # else:
+        #     report_name = get_apply_table(apply_id)
+        #     return render_template('applyreport.html', menu0='active open', menu0_3='active', pagename='申请审批表',
+        #                            report_name=report_name)
+        mode = request.args.get('mode', '')
+        if mode == 'applyreport':
+            wl = "select apply_id, sex, tenant_name, tenant_IDcode, tenant_unit, now_address, " \
+                 "(street_name + '-' + community_name) as community_name, " \
+                 "CONVERT(varchar(10), occur_date, 120) as occur_date from v_public_doors_apply " \
+                 "order by occur_date"
+            db = DB()
+            re_datas, re_s = db.get_data_by_sql(wl)
+            if re_s == '':
+                return render_template('applyreport.html', menu2='active open', menu2_1='active', applylist=re_datas,
+                                       reportinfo='', pagename='申请明细表')
+            else:
+                return render_template('error.html', errorinfo=re_s)
+        elif mode == 'applyreport_search':
+            s_date = request.args.get('s_date', '')
+            e_date = request.args.get('e_date', '')
+            state = request.args.get('state', '')
+            wl = "select apply_id, sex, tenant_name, tenant_IDcode, tenant_unit, now_address, " \
+                 "(street_name + '-' + community_name) as community_name, " \
+                 "CONVERT(varchar(10), occur_date, 120) as occur_date from v_public_doors_apply " \
+                 "where CONVERT(varchar(10), occur_date, 120) >= '" + s_date + "' and " \
+                 "CONVERT(varchar(10), occur_date, 120) <= '" + e_date + "' "
+            if state == '全部' or state == '':
+                 wl += "order by occur_date"
+            else:
+                wl += " and state_str = '" + state + "' order by occur_date"
+            db = DB()
+            re_datas, re_s = db.get_data_by_sql(wl)
+            report_info = '日期 从：' + s_date + ' 至 ' + e_date + ' ' + state
+            if re_s == '':
+                return render_template('applyreport.html', menu2='active open', menu2_1='active', applylist=re_datas,
+                                       reportinfo=report_info, pagename='申请明细表')
+            else:
+                return render_template('error.html', errorinfo=re_s)
 
     def post(self):
         pass

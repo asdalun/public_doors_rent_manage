@@ -25,20 +25,26 @@ class ApproveView(MethodView):
              "transfer_pro_1, remove_pro_1, state_str " + \
              "FROM v_public_doors_apply where apply_id = '" + apply_id + "'"
         db = DB()
-        re_datas = db.get_data_by_sql(wl)
-        if len(re_datas) != 1:
-            apply = None
+        re_datas, re_s = db.get_data_by_sql(wl)
+        if re_s == '':
+            if re_datas is None:
+                apply = None
+            else:
+                if len(re_datas) != 1:
+                    apply = None
+                else:
+                    apply = re_datas[0]
+            if mode == 'search' or mode == '':
+                return render_template('approve.html', apply=apply, menu0='active open', menu0_3='active', mode='search',
+                                       pagename='公租房申请审批表查询')
+            elif mode == 'street':
+                return render_template('approve.html', apply=apply, menu1='active open', menu1_1='active', mode='street',
+                                       pagename='公租房申请街道审批')
+            elif mode == 'dept':
+                return render_template('approve.html', apply=apply, menu1='active open', menu1_1='active', mode='dept',
+                                       pagename='公租房申请局审批')
         else:
-            apply = re_datas[0]
-        if mode == 'search' or mode == '':
-            return render_template('approve.html', apply=apply, menu0='active open', menu0_3='active', mode='search',
-                                   pagename='公租房申请审批表查询')
-        elif mode == 'street':
-            return render_template('approve.html', apply=apply, menu1='active open', menu1_1='active', mode='street',
-                                   pagename='公租房申请街道审批')
-        elif mode == 'dept':
-            return render_template('approve.html', apply=apply, menu1='active open', menu1_1='active', mode='dept',
-                                   pagename='公租房申请局审批')
+            return render_template('error.html', errorinfo=re_s)
 
     def post(self):
         token = request.headers.get('token')
@@ -48,6 +54,7 @@ class ApproveView(MethodView):
             result = {'status': 'expired', 'info': '登录过期'}
             return jsonify(result)
         opt_type = request.headers.get('opt_type')
+        # 如果为街道审批
         if opt_type == 'street_approve':
             params = (
                 request.values.get('apply_id'),
@@ -55,8 +62,7 @@ class ApproveView(MethodView):
                 user.get_username()
             )
             db = DB()
-            re_data = None
-            re_data = db.run_proc('approve_street', params)
+            re_data, re_s = db.run_proc('approve_street', params)
             if int(re_data) == 0:
                 result = {'status': 'success'}
                 return jsonify(result)
@@ -69,6 +75,7 @@ class ApproveView(MethodView):
             else:
                 result = {'status': 'fail', 'info': '审批失败！'}
                 return jsonify(result)
+        # 如果为局审批
         elif opt_type == 'dept_approve':
             params = (
                 request.values.get('apply_id'),
@@ -76,14 +83,13 @@ class ApproveView(MethodView):
                 user.get_username()
             )
             db = DB()
-            re_data = None
-            re_data = db.run_proc('approve_dept', params)
+            re_data, re_s = db.run_proc('approve_dept', params)
             if int(re_data) == 0:
                 result = {'status': 'success'}
                 return jsonify(result)
             elif int(re_data) == 1:
-                result = {'status': 'state', 'info': '该表单不在 街道已审批 状态！'}
+                result = {'status': 'state', 'info': '该表单不在 街道已审批 状态！请确认街道是否审批或局已经审批通过！'}
                 return jsonify(result)
             else:
-                result = {'status': 'fail', 'info': '审批失败！'}
+                result = {'status': 'fail', 'info': '审批失败！' + re_s}
                 return jsonify(result)
